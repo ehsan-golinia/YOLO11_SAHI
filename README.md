@@ -1,5 +1,7 @@
 # 🖼️ YOLO11 + SAHI
 
+![YOLO11_SAHI Demo](assets/output.gif)
+
 This project implements `object detection` using **YOLOv11** with **SAHI (Slicing Aided Hyper Inference)** for efficient tiled inference on videos. It processes input videos, detects objects using a YOLOv11 model, and applies SAHI to handle large images or videos by slicing them into smaller patches for improved accuracy and performance.
 
 ## 🎡 Features
