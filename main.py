@@ -8,7 +8,7 @@ from ultralytics.utils.files import increment_path
 from ultralytics.utils.torch_utils import select_device
 
 class SAHIInference:
-    def __init__(self, model_path, device='cpu'):
+    def __init__(self):
         self.detection_model = None
         
     def load_model(self, weights, device):
@@ -16,7 +16,7 @@ class SAHIInference:
         self.detection_model = AutoDetectionModel.from_pretrained(
             model_type="ultralytics",
             model_path=weights_path,
-            device=device
+            device=select_device(device)
         )
     
     def run(self, source, weights, device='cpu', view_img=True, save_img=True, 
@@ -63,7 +63,7 @@ class SAHIInference:
                 class_name = pred.category.name
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(
-                    frame, f"{class_name} {pred.score:.2f}",
+                    frame, class_name,
                     (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2
                 )
             
@@ -89,3 +89,16 @@ class SAHIInference:
         if video_writer:
             video_writer.release()
         cv2.destroyAllWindows()
+
+# Main function to run the inference
+if __name__ == "__main__":
+    detector = SAHIInference()
+    detector.run(
+        source="input_video/input_video_1.mp4",  # Path to input video file
+        weights="yolo11n.pt",  # Path to the YOLOv11 model weights
+        device="cpu",  # Select device (CPU or GPU)
+        view_img=True,  # Set to True to display the video
+        save_img=True,  # Set to True to save the output video
+        slice_size=(512, 512),  # Size of slices for SAHI
+        output_video_name="output.mp4"  # Name of the output video file
+    )
